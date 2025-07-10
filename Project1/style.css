@@ -1,0 +1,538 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", san-serif;
+}
+
+header {
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  justify-content: space-between;
+  position: absolute;
+
+  z-index: 10;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.hero-container {
+  background-image: url("https://img.freepik.com/premium-photo/craftsmen-work-two-men-welding-metal-construction-with-sparks-flying-industrial-workshop_817921-6057.jpg");
+  background-size: cover;
+  height: 80vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.hero-container::before {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+}
+
+.hero-content {
+  color: #fff;
+  height: 300px;
+  z-index: 2;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.hero-content h1 {
+  margin-top: 40px;
+  font-size: 3rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.hero-content h1 span {
+  color: #ffbe04;
+}
+
+.hero-content p {
+  text-transform: uppercase;
+  letter-spacing: 7px;
+  margin-bottom: 48px;
+}
+
+.hero-content a {
+  text-decoration: none;
+  border: 2px solid #ffbe04;
+  padding: 10px 30px;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.overlay {
+  background-color: #ffbe00;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  margin: -50px 0px 0 0px;
+  z-index: 10;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1100px;
+}
+
+.overlay h3 {
+  color: #fff4c1;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.overlay-button a {
+  text-decoration: none;
+  color: #292929;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.overlay-button {
+  background-color: #fff;
+  padding: 10px 30px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.main2 {
+  display: flex;
+  justify-content: space-between;
+  width: 1100px;
+  margin: 10rem auto;
+}
+
+.content {
+  width: 70%;
+  margin-right: 30px;
+}
+.content h2 {
+  margin-bottom: 15px;
+  font-size: 36px;
+}
+
+.content h3 {
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.image {
+  width: 30%;
+}
+
+.image img {
+  height: 350px;
+}
+
+.underline {
+  width: 50px;
+  border: 2px solid #ffbe00;
+  margin-bottom: 15px;
+  border-radius: 1px;
+}
+
+.button-class a {
+  text-decoration: none;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.button-class {
+  background-color: #ffbe00;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 65px;
+  position: absolute;
+}
+
+.main3 {
+  display: flex;
+  width: 1100px;
+  margin: 10rem auto;
+}
+
+.content-cont {
+  max-width: 350px;
+}
+
+.content-cont h3 {
+  margin-bottom: 15px;
+}
+
+.featured-works {
+  background-color: #f9f9f9;
+  text-align: center;
+  padding: 50px 0;
+}
+
+.featured-works h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.featured-works img {
+  margin-bottom: 30px;
+}
+
+.featured-works p {
+  font-size: 14px;
+  max-width: 750px;
+  margin: 0 auto 30px;
+}
+
+.gallery-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  margin-top: 50px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-item {
+  background-color: red;
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+.hover {
+  position: absolute;
+  background: rgba(255, 190, 0, 0.6);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 0;
+}
+
+.hover p {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.hover a {
+  text-decoration: none;
+  color: white;
+  background-color: #000;
+  padding: 10px 16px;
+}
+
+.gallery-item:hover .hover {
+  opacity: 1;
+}
+
+.videos {
+  position: relative;
+  text-align: center;
+  background-image: url("./assets/img1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 50px 0;
+}
+
+.videos span {
+  color: #ffbe00;
+}
+
+.videos h2 {
+  text-transform: capitalize;
+  font-size: 2rem;
+  margin-top: 100px;
+  margin-bottom: 50px;
+  color: #fff;
+}
+
+.videos p {
+  font-size: 18px;
+  max-width: 1300px;
+  margin: 0 auto 30px;
+  color: #fff;
+}
+
+.videos::before {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+}
+
+.videos-div {
+  z-index: 2;
+  position: relative;
+}
+
+.creative-team {
+  background-color: #f9f9f9;
+  text-align: center;
+  padding: 50px 0;
+  margin-top: 50px;
+}
+
+.creative-team h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-transform: capitalize;
+}
+
+.creative-team img {
+  margin-bottom: 30px;
+}
+
+.creative-team p {
+  font-size: 14px;
+  max-width: 750px;
+  margin: 0 auto 30px;
+}
+
+.creative-images {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 70px 180px 0;
+}
+
+.image-one img {
+  margin-bottom: 15px;
+}
+
+.image-one h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #232323;
+  font-weight: 500;
+}
+
+.image-one p {
+  color: #7c7c7c;
+  font-size: 12px;
+}
+
+.contact-us {
+  background-image: url("https://media.istockphoto.com/id/1733053092/photo/portrait-of-young-architect-on-construction-site.jpg?s=612x612&w=0&k=20&c=6QIbzg-yUx_zoKOMiqkXw3TmCnRxTeNdQCX1dWLtZ0M=");
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  padding: 100px;
+  position: relative;
+}
+
+.contact-us h3 {
+  color: #ffffff;
+  font-size: 36px;
+}
+
+.contact-button {
+  border: #ffbe00 solid 2px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.contact-button a {
+  text-decoration: none;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.contact-us::before {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+}
+
+.contact-content {
+  position: absolute;
+  display: flex;
+  gap: 100px;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.news-images {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 70px 180px 0;
+}
+
+.image-news img {
+  margin-bottom: 15px;
+}
+
+.image-news h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #232323;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 0.8rem;
+  margin-left: 20px;
+}
+
+.image-news p {
+  color: #7c7c7c;
+  font-size: 10px;
+  margin-left: 20px;
+  max-width: 250px;
+}
+
+.image-news {
+  background-color: #ffffff;
+  text-align: left;
+}
+
+.news-button a {
+  text-decoration: none;
+  color: #292929;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.news-button {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: #ffbe00 solid 2px;
+  padding: 10px 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 150px;
+}
+
+.news-button svg {
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.footer {
+  background-color: #111111;
+  padding: 0 0 70px;
+  margin-top: 50px;
+}
+
+.footer-content {
+  color: #ffffff;
+  margin-top: 100px;
+  max-width: 300px;
+}
+
+.main-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin: 70px 100px 0;
+}
+
+.footer-content h3 {
+  margin-bottom: 30px;
+}
+
+.footer-content p,
+li {
+  color: #868686;
+}
+
+.second {
+  margin-top: 20px;
+}
+
+.third {
+  margin-top: 10px;
+}
+
+.footer-content span {
+  font-size: 12px;
+  color: #646464;
+}
+
+.footer-content ul {
+  list-style: none;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  margin-right: 10px;
+}
+
+.ending {
+  text-align: center;
+  padding: 20px 20px;
+  width: 100%;
+  background-color: #000;
+}
+
+.ending p {
+  color: #b2b2b2;
+}
+
+.ending span {
+  color: #ffbe04;
+}
