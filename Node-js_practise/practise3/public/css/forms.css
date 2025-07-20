@@ -3,18 +3,52 @@
 }
 
 .form-control label,
-.form-control input {
+.form-control input,
+.form-control textarea,
+.private input {
     display: block;
     width: 100%;
     margin-bottom: 0.25rem;
 }
 
-.form-control input {
+.form-control input,
+.form-control textarea,
+.private input {
     border: 1px solid #a1a1a1;
     font: inherit;
     border-radius: 2px;
 }
 
-.form-control input:focus {
+.form-control input:focus,
+.form-control textarea:focus,
+.private input:focus {
     outline-color: #00695c;
+}
+
+.private {
+  margin-bottom: 15px;
+  margin: 1rem 0;
+}
+
+.input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%; /* Full width inside form-control */
+}
+
+.currency-symbol {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #000000;
+  font-size: 16px;
+  pointer-events: none; /* So it doesn't block clicks */
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 8px 10px 8px 28px; /* Add space for Naira symbol */
+  font-size: 16px;
+  box-sizing: border-box;
 }
