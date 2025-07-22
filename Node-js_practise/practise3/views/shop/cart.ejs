@@ -1,3 +1,46 @@
-<%- include('../includes/head.ejs') //This is the layout functionality for EJS %>
+<%- include('../includes/head.ejs') %>
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+    <h1>Your Cart</h1>
+    <hr />
 
-<%- include('../includes/navigation.ejs') //This is the layout functionality for EJS %> 
+    <% if (products.length > 0) { %>
+      <div class="grid">
+        <% for (let i = 0; i < products.length; i++) { %>
+          <article class="card product-item">
+            <header class="card__header">
+              <h1 class="product__title"><%= products[i].product.title %></h1>
+            </header>
+            <div class="card__image">
+              <img src="<%= products[i].product.imageURL %>" alt="<%= products[i].product.title %>" />
+            </div>
+            <div class="card__content">
+              <h2 class="product__price">₦<%= products[i].product.price %></h2>
+              <p class="product__description"><%= products[i].product.description %></p>
+              <p><strong>Quantity:</strong> <%= products[i].quantity %></p>
+              <p><strong>Total:</strong> ₦<%= (products[i].product.price * products[i].quantity).toFixed(2) %></p>
+            </div>
+            <div class = "private">
+              <form action ="/cart-delete-item" method="post">
+                <input type="hidden" name="productId" value="<%= products[i].product.id%>">
+                <button class="btn"  type="submit">Delete</button>
+              </div>
+          </form>
+          </article>
+          
+        <% } %>
+      </div>
+
+      <div class="cart-summary">
+        <h2>
+          Total Price: ₦<%= (products.reduce(function(sum, item){ return sum + (item.product.price * item.quantity); }, 0)).toFixed(2) %>
+        </h2>
+        <a href="/checkout" class="btn">Proceed to Checkout</a>
+      </div>
+    <% } else { %>
+      <h2>Your cart is empty. <a href="/">Shop now</a></h2>
+    <% } %>
+  </main>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<%- include('../includes/head.ejs') //This is the layout functionality for EJS %>
+
+<body>
+   <%- include('../includes/navigation.ejs') //This is the layout functionality for EJS %>
+   <main class="centered">
+    <h1><%= prods.title %></h1>
+    <hr>
+    <div>
+        <img src="<%= prods.imageURL%>" alt="<%= prods.title %>">
+    </div>
+    <h2><%= prods.price %></h2>
+    <p><%= prods.description %></p>
+    <form action="/cart" method="post">
+        <button class="btn">Add to Cart</button>
+        <input type="hidden" name="productId" value="<%= prods.id %>">
+    </form>
+   </main>
+</body>
+
+</html>

@@ -5,7 +5,7 @@
 .form-control label,
 .form-control input,
 .form-control textarea,
-.private input {
+.private1 input {
     display: block;
     width: 100%;
     margin-bottom: 0.25rem;
@@ -13,7 +13,7 @@
 
 .form-control input,
 .form-control textarea,
-.private input {
+.private1 input {
     border: 1px solid #a1a1a1;
     font: inherit;
     border-radius: 2px;
@@ -25,7 +25,7 @@
     outline-color: #00695c;
 }
 
-.private {
+.private1 {
   margin-bottom: 15px;
   margin: 1rem 0;
 }
