@@ -4,27 +4,29 @@ const Product = require('../models/product')
 
 
 exports.getProducts=(req,res,next)=>{
-    Products.fetchAll(products=>{
-        res.render('shop/product-list',{prods:products,pageTitle:'All Products',path:'/products',name:'shop'})  //function from express that uses default templating engine listed in app.js
+     Products.fetchAll().then(([rows,fields])=>{
+        console.log(rows)
+        res.render('shop/product-list',{prods:rows,pageTitle:'All Products',path:'/products',name:'shop'})  //function from express that uses default templating engine listed in app.js
                     //also used to pass content into the template
-    })
+    }).catch(err => console.log(err))
 }
 
 exports.getProduct=(req,res,next)=>{
     const prodId=req.params.productId;  //to extract product id from the path
-    Products.findById(prodId,product =>{
+    Products.findById(prodId).then(([product])=>{
        res.render('shop/product-details',{
-        prods:product,
+        prods:product[0],
         pageTitle:product.title,
         path:'/products'}) 
-    })
+    
+    }).catch(err=>console.log(err))
 }
 
 exports.getIndex = (req,res,next)=>{
-    Products.fetchAll(products=>{
-        res.render('shop/product-list',{prods:products,pageTitle:'Shop',path:'/',name:'shop'})  //function from express that uses default templating engine listed in app.js
+    Products.fetchAll().then(([rows,fields])=>{
+        res.render('shop/product-list',{prods:rows,pageTitle:'Shop',path:'/',name:'shop'})  //function from express that uses default templating engine listed in app.js
                     //also used to pass content into the template
-})
+    }).catch(err => console.log(err))
 }
 
 exports.getCart = (req,res,next)=>{

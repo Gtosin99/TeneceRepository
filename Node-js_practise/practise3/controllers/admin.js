@@ -19,10 +19,10 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const product = new Products(null,title, imageUrl, description, price);
-  product.save(() => {
-    // Redirect only AFTER saving is done
-    return res.redirect("/");
-  });
+  product.save().then(()=>{
+    res.redirect("/products");
+  })
+  .catch(err=>console.log(err));
 };
 
 exports.getAddProduct = (req, res, next) => {
