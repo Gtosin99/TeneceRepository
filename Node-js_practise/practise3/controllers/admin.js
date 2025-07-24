@@ -1,7 +1,8 @@
 const Products = require("../models/product");
 
 exports.getProducts = (req, res, next) => {
-  Products.fetchAll((products) => {
+  req.user.getProducts()
+    .then((products) => {
     res.render("admin/products", {
       prods: products,
       pageTitle: "Admin List",
@@ -9,7 +10,7 @@ exports.getProducts = (req, res, next) => {
       name: " ",
     }); //function from express that uses default templating engine listed in app.js
     //also used to pass content into the template
-  });
+  }).catch(err=>console.log(err))
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -18,11 +19,17 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageURL; //these are the values from the form the name must match what is written in your form
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Products(null,title, imageUrl, description, price);
-  product.save().then(()=>{
-    res.redirect("/products");
+
+  req.user.createProduct({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl:imageUrl,
   })
-  .catch(err=>console.log(err));
+  .then(result=>{
+    res.redirect('/admin/products')
+  })
+  .catch(err=>console.log(err))
 };
 
 exports.getAddProduct = (req, res, next) => {
@@ -39,7 +46,9 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const prodId = req.params.productId;
-  Products.findById(prodId, (product) => {
+  req.user.getProducts({where:{id:prodId}})
+  .then((products) => {
+    const product = products[0];
     if (!product) {
       return res.redirect("/");
     }
@@ -50,7 +59,7 @@ exports.getEditProduct = (req, res, next) => {
       editing: editMode,
       product: product,
     });
-  });
+  }).catch(err=>console.log(err));
 };
 
 exports.postEditProduct = (req,res,next)=>{
@@ -59,16 +68,26 @@ exports.postEditProduct = (req,res,next)=>{
   const updatedImageUrl = req.body.imageURL;
   const updatedPrice = req.body.price;
   const updatedDescription = req.body.description;
-  const updatedproducts= new Products(id,updatedTitle,updatedImageUrl,updatedDescription,updatedPrice)
-  updatedproducts.save(() => {
-    // Redirect only AFTER saving is done
-    return res.redirect("/admin/products");
-  })
+  Products.findByPk(id).then(
+    product => {
+      product.title = updatedTitle;
+      product.price = updatedPrice;
+      product.description = updatedDescription;
+      product.imageURL = updatedImageUrl;
+      return product.save(); 
+    })
+    .then(()=>res.redirect('/admin/products'))
+    .catch(err=>console.log(err))
 }
 
 exports.postDeleteProducts=(req,res,next)=>{
   const id=req.body.id
-  Products.delete(id,()=>{
-    return res.redirect("/admin/products");
-  })
+  Products.findByPk(id).then((product)=>{
+     if (!product) {
+        console.log('Product not found');
+        return res.redirect('/admin/products'); // Redirect even if not found
+      }
+    return product.destroy()
+  }).then(()=>res.redirect('/admin/products'))
+  .catch(err=>console.log(err))
 }

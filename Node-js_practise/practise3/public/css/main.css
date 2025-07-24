@@ -244,3 +244,74 @@ img{
   font-size: 1rem;
   text-decoration: none;
 }
+
+/* Orders Page Styling */
+.orders-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.orders-container h1 {
+  text-align: center;
+  color: #00695c;
+  margin-bottom: 1.5rem;
+}
+
+.order-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.order-item {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #fafafa;
+}
+
+.order-item h2 {
+  margin: 0 0 0.5rem 0;
+  color: #00695c;
+}
+
+.order-products {
+  list-style: none;
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+}
+
+.order-products li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-products li:last-child {
+  border-bottom: none;
+}
+
+.order-item strong {
+  color: #00695c;
+}
+
+.orders-container .btn {
+  display: inline-block;
+  margin-top: 1rem;
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  background: #00695c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.orders-container .btn:hover {
+  background: #004d40;
+}

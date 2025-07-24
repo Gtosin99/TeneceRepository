@@ -13,6 +13,7 @@ router.get('/checkout',shopcontroller.getCheckout)
 router.get('/orders',shopcontroller.getOrders)
 router.post('/cart',shopcontroller.postCart)
 router.post('/cart-delete-item',shopcontroller.postCartDeleteItem)
+router.post('/create-order',shopcontroller.postOrder)
 
 
 module.exports=router

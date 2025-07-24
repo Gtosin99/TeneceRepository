@@ -1,7 +1,7 @@
 const Sql=require('sequelize')
 const sql=require('../util/database')
 
-const Cart = sql.define('cart', {
+const Order = sql.define('order', {
   id: {
     type: Sql.INTEGER,
     primaryKey: true,
@@ -10,4 +10,4 @@ const Cart = sql.define('cart', {
     }
   })
 
-  module.exports = Cart
+  module.exports = Order

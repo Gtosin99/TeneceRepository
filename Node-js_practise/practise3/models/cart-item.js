@@ -1,13 +1,14 @@
 const Sql=require('sequelize')
 const sql=require('../util/database')
 
-const Cart = sql.define('cart', {
-  id: {
+const CartItem = sql.define('cartitem', {
+    id: {
     type: Sql.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull:false
-    }
+    },
+    quantity:Sql.INTEGER
   })
 
-  module.exports = Cart
+  module.exports = CartItem
