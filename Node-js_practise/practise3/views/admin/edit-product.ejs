@@ -16,7 +16,7 @@
             </div>
             <div class="form-control">
                 <label for="imageURL">Image URL</label>
-                <input type="text" name="imageURL" id="imageURL" value="<%= editing ? product.imageURL:' '%>">
+                <input type="text" name="imageURL" id="imageURL" value="<%= editing ? product.imageUrl:' '%>">
             </div>
             <div class="private1">
             <label for="price">Price</label>
@@ -30,7 +30,7 @@
                 <textarea name="description" id="description" rows="5" ><%= editing ? product.description:' '%></textarea>
             </div>
             <% if (editing) {%>
-                <input type="hidden" name="id" value="<%= product.id %>">
+                <input type="hidden" name="id" value="<%= product._id %>">
                 <% } %>
 
             <button class="btn" type="submit"><%= editing ? 'Update Product':'Add Product'%></button>

@@ -7,7 +7,7 @@
         <h1 class="product__title"><%= prods[i].title %></h1>
       </header>
       <div class="card__image">
-        <img src="<%= prods[i].imageURL%>" alt="A book" />
+        <img src="<%= prods[i].imageUrl%>" alt="A book" />
       </div>
       <div class="card__content">
         <h2 class="product__price">₦<%= prods[i].price %></h2>
@@ -15,17 +15,17 @@
       </div>
       <% if (name ==='shop'){ %>
       <div class="private">
-        <a href="/products/<%= prods[i].id %>" class="btn">Details</a>
+        <a href="/products/<%= prods[i]._id %>" class="btn">Details</a>
         <form action="/cart" method="post">
-          <input type="hidden" name="productId" value="<%= prods[i].id %>" />
+          <input type="hidden" name="productId" value="<%= prods[i]._id %>" />
           <button class="btn">Add to Cart</button>
         </form>
       </div>
       <% } else {%>
       <div class="private">
-        <a href="/admin/edit-product/<%= prods[i].id %>?edit=true" class="btn">Edit</a>
+        <a href="/admin/edit-product/<%= prods[i]._id %>?edit=true" class="btn">Edit</a>
         <form action="/admin/delete-product" method="post">
-            <input type="hidden" name="id" value="<%= prods[i].id %>">
+            <input type="hidden" name="id" value="<%= prods[i]._id.toString() %>">
           <button class="btn" type="submit">Delete</button>
         </form>
       </div>

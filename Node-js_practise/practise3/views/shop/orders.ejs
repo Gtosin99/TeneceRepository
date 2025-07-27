@@ -1,28 +1,29 @@
-<%- include('../includes/head.ejs') //This is the layout functionality for EJS %>
+<%- include('../includes/head.ejs') %>
 <body>
-<%- include('../includes/navigation.ejs') //This is the layout functionality for EJS %> 
+  <%- include('../includes/navigation.ejs') %>
+
   <main class="orders-container">
-  <h1>Your Orders</h1>
-  <% if (orders.length > 0) { %>
+    <h1>Your Orders</h1>
+    <% if (orders.length > 0) { %>
     <ul class="order-list">
       <% orders.forEach(order => { %>
-        <li class="order-item">
-          <h2>Order #<%= order.id %></h2>
-          <ul class="order-products">
-            <% order.products.forEach(prod => { %>
-              <li>
-                <strong><%= prod.title %></strong> - ₦<%= prod.price %> 
-                (Qty: <%= prod.orderitem.quantity %>)
-              </li>
-            <% }) %>
-          </ul>
-        </li>
+      <li class="order-item">
+        <h2>Order ID: <%= order._id %></h2>
+        <ul class="order-products">
+          <% order.items.forEach(item => { %>
+          <li>
+            <strong><%= item.title %></strong> - ₦<%= item.price %> (Qty: <%=
+            item.cartitem.quantity %>)
+          </li>
+          <% }) %>
+        </ul>
+        <p><strong>Customer:</strong> <%= order.user.username %></p>
+      </li>
       <% }) %>
     </ul>
     <a href="/" class="btn">Continue Shopping</a>
-  <% } else { %>
+    <% } else { %>
     <p class="centered">You have no orders yet.</p>
-  <% } %>
-</main>
-
+    <% } %>
+  </main>
 </body>

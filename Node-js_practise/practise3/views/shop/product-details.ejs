@@ -6,13 +6,13 @@
     <h1><%= prods.title %></h1>
     <hr>
     <div>
-        <img src="<%= prods.imageURL%>" alt="<%= prods.title %>">
+        <img src="<%= prods.imageUrl%>" alt="<%= prods.title %>">
     </div>
     <h2><%= prods.price %></h2>
     <p><%= prods.description %></p>
     <form action="/cart" method="post">
         <button class="btn">Add to Cart</button>
-        <input type="hidden" name="productId" value="<%= prods.id %>">
+        <input type="hidden" name="productId" value="<%= prods._id %>">
     </form>
    </main>
 </body>
