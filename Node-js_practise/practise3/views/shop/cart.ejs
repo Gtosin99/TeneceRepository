@@ -10,33 +10,32 @@
         <% products.forEach(product => { %>
           <article class="card product-item">
             <header class="card__header">
-              <h1 class="product__title"><%= product.title %></h1>
+              <h1 class="product__title"><%= product.productId.title %></h1>
             </header>
             <div class="card__image">
-              <img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
+              <img src="<%= product.productId.imageUrl %>" alt="<%= product.productId.title %>" />
             </div>
             <div class="card__content">
-              <h2 class="product__price">₦<%= product.price %></h2>
-              <p class="product__description"><%= product.description %></p>
-              <p><strong>Quantity:</strong> <%= product.cartitem.quantity %></p>
-              <p><strong>Total:</strong> ₦<%= (product.price * product.cartitem.quantity).toFixed(2) %></p>
+              <h2 class="product__price">₦<%= product.productId.price %></h2>
+              <p class="product__description"><%= product.productId.description %></p>
+              <p><strong>Quantity:</strong> <%= product.quantity %></p>
+              <p><strong>Total:</strong> ₦<%= (product.productId.price * product.quantity).toFixed(2) %></p>
             </div>
-            <div class = "private">
-              <form action ="/cart-delete-item" method="post">
-                <input type="hidden" name="productId" value="<%= product._id%>">
-                <button class="btn"  type="submit">Delete</button>
-              </div>
-          </form>
+            <div class="private">
+              <form action="/cart-delete-item" method="post">
+                <input type="hidden" name="productId" value="<%= product.productId._id %>">
+                <button class="btn" type="submit">Delete</button>
+              </form>
+            </div>
           </article>
-          
         <% }) %>
       </div>
 
       <div class="cart-summary">
         <h2>
-          Total Price: ₦<%= (products.reduce(function(sum, item){ 
-                 return sum + (item.price * item.cartitem.quantity); 
-                }, 0)).toFixed(2) %>
+          Total Price: ₦<%= (products.reduce(function(sum, item) { 
+            return sum + (item.productId.price * item.quantity); 
+          }, 0)).toFixed(2) %>
         </h2>
         <form action="/create-order" method="post">
           <button class="btn" type="submit">Checkout</button>
