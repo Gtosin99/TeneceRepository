@@ -14,6 +14,9 @@
             <% if(!isAuthenticated){ %>
             <ul class="main-header__item-list">
                 <li class="main-header__item"><a class="<%= path==='/login'? 'active' : ' ' %>" href="/auth/login">Login</a></li>
+                <li class="main-header__item">
+                    <a class="<%= path === '/signup' ? 'active' : '' %>" href="/auth/signup">Signup</a>
+                </li>
             <% } else {%>
                 <li class="main-header__item"><form action="/auth/logout" method="post"><button>logout</button></form></li>
             </ul>

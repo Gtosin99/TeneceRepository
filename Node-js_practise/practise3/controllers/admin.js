@@ -39,6 +39,9 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
+  // if(!req.session.isLoggedIn){    //this is to protect the route from users who are not logged in
+  //   return res.redirect('/auth/login')
+  // }
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
