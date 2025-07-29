@@ -18,6 +18,7 @@
         <a href="/products/<%= prods[i]._id %>" class="btn">Details</a>
         <% if(isAuthenticated){ %>
         <form action="/cart" method="post">
+          <input type ="hidden" name="_csrf" value="<%= csrfToken %>">
           <input type="hidden" name="productId" value="<%= prods[i]._id %>" />
           <button class="btn">Add to Cart</button>
         </form>
@@ -27,6 +28,7 @@
       <div class="private">
         <a href="/admin/edit-product/<%= prods[i]._id %>?edit=true" class="btn">Edit</a>
         <form action="/admin/delete-product" method="post">
+            <input type ="hidden" name="_csrf" value="<%= csrfToken %>">
             <input type="hidden" name="id" value="<%= prods[i]._id.toString() %>">
           <button class="btn" type="submit">Delete</button>
         </form>

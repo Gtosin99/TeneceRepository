@@ -3,18 +3,22 @@ const bcrypt = require('bcryptjs')
 
 exports.getlogin = (req, res, next) => {
   // const isLoggedIn = req.cookies.loggedIn === 'true';
+
   res.render("auth/login", {
     pageTitle: "Login",
     path: "/login",
     isAuthenticated: false,
+    error:  req.flash('error')[0]
   });
 };
 
 exports.postlogin = (req, res, next) => {
+
   const { email, password } = req.body;
    User.findOne({email:email})
       .then(user => {
         if(!user){
+          req.flash('error','Invalid Email')
           return res.redirect('/auth/login')
         }
         bcrypt.compare(password, user.password)          //for comparing the passwords
@@ -23,10 +27,10 @@ exports.postlogin = (req, res, next) => {
               req.session.isLoggedIn = true;
               req.session.user = user;
               return req.session.save((err)=>{
-              console.log(err)
-              res.redirect('/')
+                res.redirect('/')
               })
             }
+            req.flash('error','Wrong Password Entered')
             return res.redirect('/auth/login')
           })
           .catch(err=>res.redirect('/auth/login'))
@@ -38,7 +42,8 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    isAuthenticated: false
+    isAuthenticated: false,
+    error:req.flash('error')[0]
   });
 };
 
@@ -49,6 +54,7 @@ exports.postSignup = (req, res, next) => {
   User.findOne({email: email})
     .then(userDoc => {
       if (userDoc) {
+        req.flash('error','Email already used')
         return res.redirect('/auth/login') // redirect to login page
         }
         return bcrypt.hash(password, 12)

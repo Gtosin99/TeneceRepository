@@ -2,6 +2,7 @@
 <body>
   <%- include('../includes/navigation.ejs') %>
   <main>
+    <input type ="hidden" name="_csrf" value="<%= csrfToken %>">
     <h1>Your Cart</h1>
     <hr />
 
@@ -24,6 +25,7 @@
             <div class="private">
               <form action="/cart-delete-item" method="post">
                 <input type="hidden" name="productId" value="<%= product.productId._id %>">
+                <input type ="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button class="btn" type="submit">Delete</button>
               </form>
             </div>
@@ -38,6 +40,7 @@
           }, 0)).toFixed(2) %>
         </h2>
         <form action="/create-order" method="post">
+          <input type ="hidden" name="_csrf" value="<%= csrfToken %>">
           <button class="btn" type="submit">Checkout</button>
         </form>
       </div>

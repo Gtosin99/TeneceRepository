@@ -38,7 +38,8 @@ exports.getIndex = (req, res, next) => {
         pageTitle: "Shop",
         path: "/",
         name: "shop",
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        csrfToken:req.csrfToken()
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -138,8 +139,8 @@ exports.postOrder = (req, res, next) => {
       });
       const order = new Order({
         user: {
-          name: req.user.name,
-          userId: req.user,
+          email:req.user.email,
+          userId: req.user
         },
         products: products,
       });

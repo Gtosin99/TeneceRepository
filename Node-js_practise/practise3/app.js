@@ -3,6 +3,7 @@ const parser = require("body-parser");
 const path = require("path");
 const session=require('express-session')
 const stores = require('connect-mongodb-session')(session)
+const flash = require('connect-flash')
 
 
 const adminroutes = require("./routes/admin");
@@ -13,7 +14,7 @@ const User = require("./models/user");
 const mongoose = require("mongoose");
 const auth = require('./routes/auth')
 const cookieParser = require('cookie-parser');
-
+const csrf = require('csurf')
 
 
 
@@ -24,6 +25,8 @@ const store = new stores({
   uri:"mongodb+srv://tosinakindele826:12345@cluster0.otcx1mi.mongodb.net/shop?retryWrites=true&w=majority&tls=true",
   collection: 'sessions',
 })
+
+const csrfprotection = csrf()
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -36,6 +39,18 @@ app.use(session({
   saveUninitialized: false, //session will not be created for new user
   store: store
 }))
+
+app.use(flash())
+app.use(csrfprotection)
+
+
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken(); // Now csrfToken is available in all EJS files
+  res.locals.isAuthenticated=req.session.isLoggedIn
+  next();
+});
+
+
 
 app.use((req, res, next) => {
   if (!req.session.user) {
