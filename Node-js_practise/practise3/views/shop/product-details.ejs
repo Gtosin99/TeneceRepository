@@ -10,10 +10,12 @@
     </div>
     <h2><%= prods.price %></h2>
     <p><%= prods.description %></p>
+    <% if(isAuthenticated){ %>
     <form action="/cart" method="post">
         <button class="btn">Add to Cart</button>
         <input type="hidden" name="productId" value="<%= prods._id %>">
     </form>
+    <% } %>
    </main>
 </body>
 

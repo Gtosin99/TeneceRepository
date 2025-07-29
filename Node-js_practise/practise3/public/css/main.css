@@ -28,8 +28,10 @@ article{
 
 .main-header__nav {
   height: 100%;
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .centered{
@@ -314,4 +316,11 @@ img{
 
 .orders-container .btn:hover {
   background: #004d40;
+}
+
+.login-form {
+  width: 20rem;
+  max-width: 90%;
+  margin: auto;
+  display: block;
 }

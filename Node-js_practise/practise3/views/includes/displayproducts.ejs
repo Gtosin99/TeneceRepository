@@ -16,10 +16,12 @@
       <% if (name ==='shop'){ %>
       <div class="private">
         <a href="/products/<%= prods[i]._id %>" class="btn">Details</a>
+        <% if(isAuthenticated){ %>
         <form action="/cart" method="post">
           <input type="hidden" name="productId" value="<%= prods[i]._id %>" />
           <button class="btn">Add to Cart</button>
         </form>
+         <% } %>
       </div>
       <% } else {%>
       <div class="private">

@@ -1,5 +1,4 @@
 const Products = require("../models/product");
-const User = require("../models/user");
 const Order = require("../models/order");
 
 exports.getProducts = (req, res, next) => {
@@ -10,6 +9,7 @@ exports.getProducts = (req, res, next) => {
         pageTitle: "Products",
         path: "/products",
         name: "shop",
+        isAuthenticated: req.session.isLoggedIn
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -23,7 +23,8 @@ exports.getProduct = (req, res, next) => {
       res.render("shop/product-details", {
         prods: product,
         pageTitle: product.title,
-        path: "/products",
+        path: "/products", 
+      isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
@@ -37,6 +38,7 @@ exports.getIndex = (req, res, next) => {
         pageTitle: "Shop",
         path: "/",
         name: "shop",
+        isAuthenticated: req.session.isLoggedIn
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -52,6 +54,7 @@ exports.getCart = (req, res, next) => {
         path: "/cart",
         pageTitle: "Your Cart",
         products: products,
+        isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
@@ -98,7 +101,9 @@ exports.postCart = (req, res, next) => {
 };
 
 exports.getCheckout = (req, res, next) => {
-  res.render("shop/checkout", { path: "/checkout", pageTitle: "Checkout" });
+  res.render("shop/checkout", { path: "/checkout", pageTitle: "Checkout" ,
+     isAuthenticated: req.session.isLoggedIn
+    });
 };
 
 exports.getOrders = (req, res, next) => {
@@ -108,6 +113,7 @@ exports.getOrders = (req, res, next) => {
         path: "/orders",
         pageTitle: "Orders",
         orders: orders,
+        isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch((err) => console.log(err));
