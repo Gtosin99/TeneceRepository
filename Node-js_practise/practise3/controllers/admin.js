@@ -1,7 +1,7 @@
 const Products = require("../models/product");
 
 exports.getProducts = (req, res, next) => {
-  Products.find()
+  Products.find({userId:req.user._id})
  // this helps to retrive other tables related to our productin this case it wil use the userid in our product data and fetch all the user data .populate(userId)
     .then((products) => {
       res.render("admin/products", {
@@ -82,20 +82,23 @@ exports.postEditProduct = (req, res, next) => {
 
   Products.findById(id)
     .then((product) => {
+      if(product.user.id.toString() !== req.user._id.toString()){
+        return res.redirect('/');
+      }
       product.title = updatedTitle;
       product.imageUrl = updatedImageUrl;
       product.price = updatedPrice;
       product.description = updatedDescription;
-      return product.save();
+      return product.save()
+      .then(() => res.redirect("/admin/products"))
     })
-    .then(() => res.redirect("/admin/products"))
     .catch((err) => console.log(err));
 };
 
 exports.postDeleteProducts = (req, res, next) => {
   const id = req.body.id;
 
-  Products.findByIdAndDelete(id)
+  Products.deleteOne({_id:id, userId:req.user._id})
     .then((product) => {
       res.redirect("/admin/products");
     })
