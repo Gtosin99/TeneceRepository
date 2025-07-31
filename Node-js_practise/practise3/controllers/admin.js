@@ -1,15 +1,16 @@
 const Products = require("../models/product");
+const { validationResult } = require("express-validator");
 
 exports.getProducts = (req, res, next) => {
-  Products.find({userId:req.user._id})
- // this helps to retrive other tables related to our productin this case it wil use the userid in our product data and fetch all the user data .populate(userId)
+  Products.find({ userId: req.user._id })
+    // this helps to retrive other tables related to our productin this case it wil use the userid in our product data and fetch all the user data .populate(userId)
     .then((products) => {
       res.render("admin/products", {
         prods: products,
         pageTitle: "Admin List",
         path: "/admin/products",
         name: " ",
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -22,12 +23,29 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageURL; //these are the values from the form the name must match what is written in your form
   const price = req.body.price;
   const description = req.body.description;
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(422).render("admin/edit-product", {
+      pageTitle: "Add Product",
+      path: "/admin/add-product",
+      editing: false,
+      isAuthenticated: req.session.isLoggedIn,
+      errors:error.array(),
+      product: {
+        title: title,
+        imageUrl: imageUrl,
+        price:price,
+        description: description
+      },
+      hasError:true
+    })
+  }
   const product = new Products({
     title: title,
     price: price,
     description: description,
     imageUrl: imageUrl,
-    userId:req.user
+    userId: req.user,
   });
   product
     .save()
@@ -42,16 +60,27 @@ exports.getAddProduct = (req, res, next) => {
   // if(!req.session.isLoggedIn){    //this is to protect the route from users who are not logged in
   //   return res.redirect('/auth/login')
   // }
+  const error=validationResult(req)
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
-    isAuthenticated: req.session.isLoggedIn
+    isAuthenticated: req.session.isLoggedIn,
+    errors:[],
+    product: {
+        title: '',
+        imageUrl: '',
+        price:'',
+        description: '',
+      },
+       hasError:false
   });
 };
 
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit; //checks if edit is a query in the path
+  const error = validationResult(req);
+
   if (!editMode) {
     return res.redirect("/");
   }
@@ -67,7 +96,9 @@ exports.getEditProduct = (req, res, next) => {
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
+        errors:[],
+       hasError:true
       });
     })
     .catch((err) => console.log(err));
@@ -79,18 +110,38 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageURL;
   const updatedPrice = req.body.price;
   const updatedDescription = req.body.description;
+   const error=validationResult(req)
+   if (!error.isEmpty()) {
+    return res.status(422).render("admin/edit-product", {
+        pageTitle: "Edit Product",
+        path: "/admin/edit-product",
+        editing: true,
+        isAuthenticated: req.session.isLoggedIn,
+        errors:error.array(),
+        product: {
+        _id:id,
+        title: updatedTitle,
+        imageUrl: updatedImageUrl,
+        price:updatedPrice,
+        description: updatedDescription,
+      },
+       hasError:true
+      });
+   }
 
   Products.findById(id)
     .then((product) => {
-      if(product.user.id.toString() !== req.user._id.toString()){
-        return res.redirect('/');
+       if (!product) {
+      return res.redirect("/admin/products"); // Or show a 404 page
+    }
+      if (product.userId.toString() !== req.user._id.toString()) {
+        return res.redirect("/");
       }
       product.title = updatedTitle;
       product.imageUrl = updatedImageUrl;
       product.price = updatedPrice;
       product.description = updatedDescription;
-      return product.save()
-      .then(() => res.redirect("/admin/products"))
+      return product.save().then(() => res.redirect("/admin/products"));
     })
     .catch((err) => console.log(err));
 };
@@ -98,7 +149,7 @@ exports.postEditProduct = (req, res, next) => {
 exports.postDeleteProducts = (req, res, next) => {
   const id = req.body.id;
 
-  Products.deleteOne({_id:id, userId:req.user._id})
+  Products.deleteOne({ _id: id, userId: req.user._id })
     .then((product) => {
       res.redirect("/admin/products");
     })
@@ -107,4 +158,3 @@ exports.postDeleteProducts = (req, res, next) => {
       res.redirect("/admin/products");
     });
 };
-
