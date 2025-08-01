@@ -8,7 +8,7 @@ const {validationResult} = require('express-validator')
 const transporter = nodemailer.createTransport(
   sendgrid({
     auth: {
-      api_key: "your-key",
+      api_key: "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",
     }
   })
 );
@@ -115,7 +115,11 @@ exports.postSignup = (req, res, next) => {
             html: "<h1>Signup Successfull</h1>",
           });
         })
-    .catch((err) => console.log(err));
+    .catch((err) =>{
+      const error = new Error(err)
+      error.httpStatusCode = 500
+      return next(error)
+    })
 };
 
 exports.postlogout = (req, res, next) => {
@@ -164,7 +168,11 @@ exports.postReset = (req,res,next) => {
            `
         });
       })
-      .catch();
+      .catch((err) =>{
+      const error = new Error(err)
+      error.httpStatusCode = 500
+      return next(error)
+    })
   });
 };
 
@@ -182,7 +190,11 @@ exports.getnewpassword = (req,res,next)=>{
       passwordToken:token
   });  
     })
-    .catch(err=>console.log(err))
+    .catch((err) =>{
+      const error = new Error(err)
+      error.httpStatusCode = 500
+      return next(error)
+    })
   
 }
 

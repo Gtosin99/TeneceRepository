@@ -14,7 +14,11 @@ exports.getProducts = (req, res, next) => {
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
-    .catch((err) => console.log(err));
+    .catch((err) =>{
+      const error = new Error(err)
+      error.httpStatusCode = 500
+      return next(error)
+    })
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -25,7 +29,7 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
   const error = validationResult(req);
   if (!error.isEmpty()) {
-    return res.status(422).render("admin/edit-product", {
+    return res.status(500).render("admin/edit-product", {
       pageTitle: "Add Product",
       path: "/admin/add-product",
       editing: false,
@@ -53,7 +57,26 @@ exports.postAddProduct = (req, res, next) => {
       console.log(result);
       res.redirect("/admin/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+    //    return res.status(422).render("admin/edit-product", {
+    //   pageTitle: "Add Product",
+    //   path: "/admin/add-product",
+    //   editing: false,
+    //   isAuthenticated: req.session.isLoggedIn,
+    //   errors:['Databse operation failed,Please try again'],
+    //   product: {
+    //     title: title,
+    //     imageUrl: imageUrl,
+    //     price:price,
+    //     description: description
+    //   },
+    //   hasError:true
+    // })
+    //res.redirect('/500')
+    const error = new Error(err)
+    error.httpStatusCode = 500
+    return next(error)  //this will call the error handler in app.js
+    });
 };
 
 exports.getAddProduct = (req, res, next) => {
@@ -101,7 +124,11 @@ exports.getEditProduct = (req, res, next) => {
        hasError:true
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) =>{
+      const error = new Error(err)
+      error.httpStatusCode = 500
+      return next(error)
+    })
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -143,7 +170,11 @@ exports.postEditProduct = (req, res, next) => {
       product.description = updatedDescription;
       return product.save().then(() => res.redirect("/admin/products"));
     })
-    .catch((err) => console.log(err));
+    .catch((err) =>{
+      const error = new Error(err)
+      error.httpStatusCode = 500
+      return next(error)
+    })
 };
 
 exports.postDeleteProducts = (req, res, next) => {
