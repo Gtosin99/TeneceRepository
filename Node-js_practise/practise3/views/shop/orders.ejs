@@ -18,7 +18,8 @@
                 </li>
               <% }) %>
             </ul>
-            <p><strong>Customer:</strong> <%= order.user.name %></p>
+            <p><strong>Customer Email:</strong> <%= order.user.email %></p>
+            <a href="/orders/<%= order._id %>">Invoice</a>
           </li>
         <% }) %>
       </ul>

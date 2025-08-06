@@ -14,7 +14,8 @@
       <% }) %>
     <% } %>
 
-    <form class="product-form" action="/admin/<%= editing ? 'edit-product' : 'add-product' %>" method="POST">
+    <form class="product-form" action="/admin/<%= editing ? 'edit-product' : 'add-product' %>" method="POST" enctype="multipart/form-data">
+       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div class="form-control">
         <label for="title">Title</label>
         <input
@@ -25,7 +26,7 @@
           value="<%= editing || hasError ? product.title : '' %>">
       </div>
 
-      <div class="form-control">
+      <!-- <div class="form-control">
         <label for="imageURL">Image URL</label>
         <input
           class="<%= errors.find(e => e.param === 'imageUrl') ? 'invalid' : '' %>"
@@ -33,6 +34,14 @@
           name="imageURL"
           id="imageURL"
           value="<%= editing || hasError ? product.imageUrl : '' %>">
+      </div> -->
+      <div class="form-control">
+        <label for="image">Image</label>
+        <input
+          type="file"
+          name="image"
+          id="image"
+          />
       </div>
 
       <div class="private1">
@@ -62,7 +71,6 @@
       <% if (editing) { %>
         <input type="hidden" name="id" value="<%= product._id %>">
       <% } %>
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <button class="btn" type="submit"><%= editing ? 'Update Product' : 'Add Product' %></button>
     </form>
   </main>

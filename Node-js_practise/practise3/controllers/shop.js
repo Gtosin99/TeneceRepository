@@ -1,5 +1,8 @@
 const Products = require("../models/product");
 const Order = require("../models/order");
+const fs = require("fs");
+const path = require("path");
+const pdfdoc = require('pdfkit')
 
 exports.getProducts = (req, res, next) => {
   Products.find()
@@ -9,15 +12,15 @@ exports.getProducts = (req, res, next) => {
         pageTitle: "Products",
         path: "/products",
         name: "shop",
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
-    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getProduct = (req, res, next) => {
@@ -27,15 +30,15 @@ exports.getProduct = (req, res, next) => {
       res.render("shop/product-details", {
         prods: product,
         pageTitle: product.title,
-        path: "/products", 
-      isAuthenticated: req.session.isLoggedIn
+        path: "/products",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
-    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getIndex = (req, res, next) => {
@@ -47,34 +50,34 @@ exports.getIndex = (req, res, next) => {
         path: "/",
         name: "shop",
         isAuthenticated: req.session.isLoggedIn,
-        csrfToken:req.csrfToken()
+        csrfToken: req.csrfToken(),
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
-    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getCart = (req, res, next) => {
   req.user
     .populate("cart.items.productId")
     .then((user) => {
-      const products = user.cart.items.filter(p => p.productId !== null);
+      const products = user.cart.items.filter((p) => p.productId !== null);
       res.render("shop/cart", {
         path: "/cart",
         pageTitle: "Your Cart",
         products: products,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
-    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postCart = (req, res, next) => {
@@ -84,11 +87,11 @@ exports.postCart = (req, res, next) => {
       return req.user.addToCart(product);
     })
     .then((result) => res.redirect("/cart"))
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
-    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
   // let fetchedcart;
   // let newquantity = 1;
   // //const quantity = req.body.quantity;
@@ -122,26 +125,28 @@ exports.postCart = (req, res, next) => {
 };
 
 exports.getCheckout = (req, res, next) => {
-  res.render("shop/checkout", { path: "/checkout", pageTitle: "Checkout" ,
-     isAuthenticated: req.session.isLoggedIn
-    });
+  res.render("shop/checkout", {
+    path: "/checkout",
+    pageTitle: "Checkout",
+    isAuthenticated: req.session.isLoggedIn,
+  });
 };
 
 exports.getOrders = (req, res, next) => {
-  Order.find({'user.userId':req.user._id})
+  Order.find({ "user.userId": req.user._id })
     .then((orders) => {
       res.render("shop/orders", {
         path: "/orders",
         pageTitle: "Orders",
         orders: orders,
-        isAuthenticated: req.session.isLoggedIn
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
-    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postCartDeleteItem = (req, res, next) => {
@@ -151,10 +156,10 @@ exports.postCartDeleteItem = (req, res, next) => {
     .then(() => {
       res.redirect("/cart");
     })
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -167,8 +172,8 @@ exports.postOrder = (req, res, next) => {
       });
       const order = new Order({
         user: {
-          email:req.user.email,
-          userId: req.user
+          email: req.user.email,
+          userId: req.user,
         },
         products: products,
       });
@@ -180,9 +185,60 @@ exports.postOrder = (req, res, next) => {
     .then((result) => {
       res.redirect("/orders");
     })
-    .catch((err) =>{
-      const error = new Error(err)
-      error.httpStatusCode = 500
-      return next(error)
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
+exports.getInvoice = (req, res, next) => {
+  const orderId = req.params.orderId;
+  Order.findById(orderId)
+    .then((order) => {
+      if (!order) {
+        return next(new Error("No order found."));
+      }
+      if (order.user.userId.toString() !== req.user._id.toString()) {
+        return next(new Error("Unauthorized"));
+      }
+      const invoicename = "invoice-" + orderId + ".pdf";
+      const invoicePath = path.join("data", "invoices", invoicename);
+
+      const pdfDoc = new pdfdoc()
+      res.setHeader("Content-Disposition", `inline; filename="${invoicename}"`);
+      res.setHeader("Content-Type", "application/pdf");
+      pdfDoc.pipe(fs.createWriteStream(invoicePath))
+      pdfDoc.pipe(res)
+
+      pdfDoc.fontSize(26).text('Invoice',{
+        underline:true
+      })
+      pdfDoc.text('--------------------------------------------------')
+      let totalprice = 0
+      order.products.forEach(prod =>{
+        totalprice += prod.quantity * prod.product.price
+        pdfDoc.fontSize(18).text(prod.product.title + ' - ' + prod.quantity + ' x ₦' + prod.product.price)
+      })
+      pdfDoc.text('-----------')
+      pdfDoc.text(`Total Price:₦',${totalprice}`)
+      pdfDoc.end()
+      // fs.readFile(invoicePath,(err,data)=>{
+      //   if(err){
+      //     return res.status(500).send({message:'Error reading file'})
+      //   }
+      //   res.setHeader('Content-Type','application/pdf')
+      //   res.setHeader('Content-Disposition','inline:filename="' + invoicename + '"')
+
+      // })
+    //   const file = fs.createReadStream(invoicePath);
+    //   res.setHeader("Content-Disposition", `inline; filename="${invoicename}"`);
+    //   res.setHeader("Content-Type", "application/pdf");
+    //   file.pipe(res)     //for serving static files from as folder
     })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
