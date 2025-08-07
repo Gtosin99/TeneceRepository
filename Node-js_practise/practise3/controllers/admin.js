@@ -14,6 +14,7 @@ exports.getProducts = (req, res, next) => {
         path: "/admin/products",
         name: " ",
         isAuthenticated: req.session.isLoggedIn,
+        isindex:3
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -191,8 +192,6 @@ exports.postEditProduct = (req, res, next) => {
       return next(error);
     });
 };
-
-const fileHelper = require('../util/file'); // Assuming your helper is here
 
 exports.postDeleteProducts = (req, res, next) => {
   const id = req.body.id;

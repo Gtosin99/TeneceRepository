@@ -4,8 +4,17 @@ const fs = require("fs");
 const path = require("path");
 const pdfdoc = require('pdfkit')
 
+const itemsperpage = 2
+let totalitems
+
 exports.getProducts = (req, res, next) => {
-  Products.find()
+  const page = +req.query.page || 1
+  Products.find().countDocuments().then(count=>{
+    totalitems = count
+    return Products.find() //moongose function which will give all the data in th db
+            .skip((page - 1) * itemsperpage) //to skip the items that 
+            .limit(itemsperpage)
+  })
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
@@ -13,6 +22,13 @@ exports.getProducts = (req, res, next) => {
         path: "/products",
         name: "shop",
         isAuthenticated: req.session.isLoggedIn,
+        isindex:2,
+        currentpage:page,
+        hasnextpage:itemsperpage * page < totalitems,
+        hasPreviouspage: page>1,
+        nextpage:page+1,
+        previouspage:page-1,
+        lastpage:Math.ceil(totalitems/itemsperpage)
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -42,15 +58,30 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Products.find() //moongose function which will give all the data in th db
-    .then((products) => {
-      res.render("shop/product-list", {
+  const page = +req.query.page || 1
+  
+  Products.find().countDocuments()
+  .then((count) => {
+    totalitems = count
+    return Products.find() //moongose function which will give all the data in th db
+            .skip((page - 1) * itemsperpage) //to skip the items that 
+            .limit(itemsperpage)
+  })
+  .then((products) => {
+      res.render("shop/index", {
         prods: products,
         pageTitle: "Shop",
         path: "/",
         name: "shop",
         isAuthenticated: req.session.isLoggedIn,
         csrfToken: req.csrfToken(),
+        currentpage:page,
+        hasnextpage:itemsperpage * page < totalitems,
+        hasPreviouspage: page>1,
+        nextpage:page+1,
+        previouspage:page-1,
+        lastpage:Math.ceil(totalitems/itemsperpage),
+        isindex:1
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })

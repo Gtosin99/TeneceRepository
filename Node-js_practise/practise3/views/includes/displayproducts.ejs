@@ -37,6 +37,29 @@
     </article>
     <% } %>
   </div>
+  <% if (isindex === 1 || isindex === 2) { %>
+  <section class="pagination">
+    <% if (currentpage != 1 && previouspage != 1) { %>  
+      <a href="<%=isindex==2 ? '/products':''%>/?page=1">1</a> 
+    <% } %>
+
+    <% if (previouspage) { %>  
+      <a href="<%=isindex==2 ? '/products':''%>/?page=<%= previouspage %>"><%= previouspage %></a> 
+    <% } %>
+
+    <a href="<%=isindex==2 ? '/products':''%>/?page=<%= currentpage %>" class="active"><%= currentpage %></a>
+
+    <% if (hasnextpage) { %>  
+      <a href="<%=isindex==2 ? '/products':''%>/?page=<%= nextpage %>"><%= nextpage %></a> 
+    <% } %>
+
+    <% if (lastpage !== currentpage && nextpage !== lastpage) { %> 
+      <a href="<%=isindex==2 ? '/products':''%>/?page=<%= lastpage %>"><%= lastpage %></a> 
+    <% } %>
+  </section>
+<% } %>
+
+
   <% } else { %>
   <h1>No products found.</h1>
   <% } %>
