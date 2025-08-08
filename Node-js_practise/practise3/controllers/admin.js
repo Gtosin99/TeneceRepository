@@ -193,8 +193,8 @@ exports.postEditProduct = (req, res, next) => {
     });
 };
 
-exports.postDeleteProducts = (req, res, next) => {
-  const id = req.body.id;
+exports.DeleteProducts = (req, res, next) => {
+  const id = req.params.productId;
 
   Products.findById(id)
     .then(product => {
@@ -202,20 +202,21 @@ exports.postDeleteProducts = (req, res, next) => {
         const error = new Error('Product not found.');
         error.httpStatusCode = 404;
         throw error;
+        
       }
 
       // Delete associated image
-      fileHelper.deleteFile(product.imageUrl);
+      file.deletefile(product.imageUrl);
 
       // Delete the product only if it belongs to the logged-in user
       return Products.deleteOne({ _id: id, userId: req.user._id });
     })
     .then(() => {
-      res.redirect("/admin/products");
+      res.status(200).json({message:'Deleted Successfully'})
     })
     .catch(err => {
-      err.httpStatusCode = err.httpStatusCode || 500;
-      next(err); // Important to pass it to next
+      res.status(500).json({message:'Failed to Delete'})
+      console.log(err)
     });
 };
 

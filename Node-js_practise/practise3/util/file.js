@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const deletefile = (filePath) =>{
+const deleteFile = (filePath) =>{
     fs.unlink(filePath, (err) => {
         if (err) {
             throw (err)
@@ -8,4 +8,4 @@ const deletefile = (filePath) =>{
     })
 }
 
-exports.deletefile=deletefile
+exports.deletefile=deleteFile

@@ -34,6 +34,6 @@ router.post('/edit-product',isAuth,[
       .trim()
   ],admincontroller.postEditProduct)
 
-router.post('/delete-product',isAuth,admincontroller.postDeleteProducts)
+router.delete('/product/:productId',isAuth,admincontroller.DeleteProducts)
 
 exports.routes= router
