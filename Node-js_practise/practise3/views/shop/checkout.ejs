@@ -1,0 +1,46 @@
+<%- include('../includes/head.ejs') %>
+<body>
+  <%- include('../includes/navigation.ejs') %>
+  <main>
+    <h1 class="centered">Checkout Page</h1>
+
+    <% if (products.length > 0) { %>
+      <div class="grid">
+        <% products.forEach(product => { %>
+          <article class="card product-item">
+            <header class="card__header">
+              <h2 class="product__title"><%= product.productId.title %></h2>
+            </header>
+            <div class="card__image">
+              <img src="<%= product.productId.imageUrl %>" alt="<%= product.productId.title %>">
+            </div>
+            <div class="card__content">
+              <h2 class="product__price">₦<%= product.productId.price.toFixed(2) %></h2>
+              <p class="product__description"><%= product.productId.description %></p>
+              <p><strong>Quantity:</strong> <%= product.quantity %></p>
+              <p><strong>Total:</strong> ₦<%= (product.productId.price * product.quantity).toFixed(2) %></p>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+
+      <section class="cart-summary">
+        <h2>Total Amount: ₦<%= totalPrice.toFixed(2) %></h2>
+          <script src="https://js.stripe.com/basil/stripe.js"></script>
+          <button id="order-btn" class="btn">Place Order</button>
+          <script>
+            var stripe = Stripe('pk_test_51RtpY57bF57bVq7G64PaxER6DFije779zlM5Yj2mtTIXByddF5FIEPUJL3hYo0UibTOki9nBi98UJsjmfexnRSKg00DBF4qutW')
+            var orderbtn=document.getElementById('order-btn')
+            orderbtn.addEventListener('click', function(){
+                stripe.redirectToCheckout({
+                    sessionId:'<%=sessionId%>'
+                })
+            })
+          </script>
+      </section>
+    <% } else { %>
+      <h2 class="centered">Your cart is empty. Please add some products.</h2>
+    <% } %>
+  </main>
+</body>
+</html>

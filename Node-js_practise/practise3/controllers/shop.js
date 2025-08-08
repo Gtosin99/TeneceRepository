@@ -2,19 +2,24 @@ const Products = require("../models/product");
 const Order = require("../models/order");
 const fs = require("fs");
 const path = require("path");
-const pdfdoc = require('pdfkit')
+const pdfdoc = require("pdfkit");
+const stripe = require("stripe")(
+  "sk_test_51RtpY57bF57bVq7Go26FqAP9zPR4ADj1UBfzSeLIhsiZb3FlqZHq3TMz6gd17Itbs1rztnX4u4ZQWYZiMbOPJt2e00nQ2n6aC1"
+);
 
-const itemsperpage = 2
-let totalitems
+const itemsperpage = 2;
+let totalitems;
 
 exports.getProducts = (req, res, next) => {
-  const page = +req.query.page || 1
-  Products.find().countDocuments().then(count=>{
-    totalitems = count
-    return Products.find() //moongose function which will give all the data in th db
-            .skip((page - 1) * itemsperpage) //to skip the items that 
-            .limit(itemsperpage)
-  })
+  const page = +req.query.page || 1;
+  Products.find()
+    .countDocuments()
+    .then((count) => {
+      totalitems = count;
+      return Products.find() //moongose function which will give all the data in th db
+        .skip((page - 1) * itemsperpage) //to skip the items that
+        .limit(itemsperpage);
+    })
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
@@ -22,13 +27,13 @@ exports.getProducts = (req, res, next) => {
         path: "/products",
         name: "shop",
         isAuthenticated: req.session.isLoggedIn,
-        isindex:2,
-        currentpage:page,
-        hasnextpage:itemsperpage * page < totalitems,
-        hasPreviouspage: page>1,
-        nextpage:page+1,
-        previouspage:page-1,
-        lastpage:Math.ceil(totalitems/itemsperpage)
+        isindex: 2,
+        currentpage: page,
+        hasnextpage: itemsperpage * page < totalitems,
+        hasPreviouspage: page > 1,
+        nextpage: page + 1,
+        previouspage: page - 1,
+        lastpage: Math.ceil(totalitems / itemsperpage),
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -58,16 +63,17 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  const page = +req.query.page || 1
-  
-  Products.find().countDocuments()
-  .then((count) => {
-    totalitems = count
-    return Products.find() //moongose function which will give all the data in th db
-            .skip((page - 1) * itemsperpage) //to skip the items that 
-            .limit(itemsperpage)
-  })
-  .then((products) => {
+  const page = +req.query.page || 1;
+
+  Products.find()
+    .countDocuments()
+    .then((count) => {
+      totalitems = count;
+      return Products.find() //moongose function which will give all the data in th db
+        .skip((page - 1) * itemsperpage) //to skip the items that
+        .limit(itemsperpage);
+    })
+    .then((products) => {
       res.render("shop/index", {
         prods: products,
         pageTitle: "Shop",
@@ -75,13 +81,13 @@ exports.getIndex = (req, res, next) => {
         name: "shop",
         isAuthenticated: req.session.isLoggedIn,
         csrfToken: req.csrfToken(),
-        currentpage:page,
-        hasnextpage:itemsperpage * page < totalitems,
-        hasPreviouspage: page>1,
-        nextpage:page+1,
-        previouspage:page-1,
-        lastpage:Math.ceil(totalitems/itemsperpage),
-        isindex:1
+        currentpage: page,
+        hasnextpage: itemsperpage * page < totalitems,
+        hasPreviouspage: page > 1,
+        nextpage: page + 1,
+        previouspage: page - 1,
+        lastpage: Math.ceil(totalitems / itemsperpage),
+        isindex: 1,
       }); //function from express that uses default templating engine listed in app.js
       //also used to pass content into the template
     })
@@ -236,24 +242,32 @@ exports.getInvoice = (req, res, next) => {
       const invoicename = "invoice-" + orderId + ".pdf";
       const invoicePath = path.join("data", "invoices", invoicename);
 
-      const pdfDoc = new pdfdoc()
+      const pdfDoc = new pdfdoc();
       res.setHeader("Content-Disposition", `inline; filename="${invoicename}"`);
       res.setHeader("Content-Type", "application/pdf");
-      pdfDoc.pipe(fs.createWriteStream(invoicePath))
-      pdfDoc.pipe(res)
+      pdfDoc.pipe(fs.createWriteStream(invoicePath));
+      pdfDoc.pipe(res);
 
-      pdfDoc.fontSize(26).text('Invoice',{
-        underline:true
-      })
-      pdfDoc.text('--------------------------------------------------')
-      let totalprice = 0
-      order.products.forEach(prod =>{
-        totalprice += prod.quantity * prod.product.price
-        pdfDoc.fontSize(18).text(prod.product.title + ' - ' + prod.quantity + ' x ₦' + prod.product.price)
-      })
-      pdfDoc.text('-----------')
-      pdfDoc.text(`Total Price:₦',${totalprice}`)
-      pdfDoc.end()
+      pdfDoc.fontSize(26).text("Invoice", {
+        underline: true,
+      });
+      pdfDoc.text("--------------------------------------------------");
+      let totalprice = 0;
+      order.products.forEach((prod) => {
+        totalprice += prod.quantity * prod.product.price;
+        pdfDoc
+          .fontSize(18)
+          .text(
+            prod.product.title +
+              " - " +
+              prod.quantity +
+              " x ₦" +
+              prod.product.price
+          );
+      });
+      pdfDoc.text("-----------");
+      pdfDoc.text(`Total Price:₦',${totalprice}`);
+      pdfDoc.end();
       // fs.readFile(invoicePath,(err,data)=>{
       //   if(err){
       //     return res.status(500).send({message:'Error reading file'})
@@ -262,10 +276,62 @@ exports.getInvoice = (req, res, next) => {
       //   res.setHeader('Content-Disposition','inline:filename="' + invoicename + '"')
 
       // })
-    //   const file = fs.createReadStream(invoicePath);
-    //   res.setHeader("Content-Disposition", `inline; filename="${invoicename}"`);
-    //   res.setHeader("Content-Type", "application/pdf");
-    //   file.pipe(res)     //for serving static files from as folder
+      //   const file = fs.createReadStream(invoicePath);
+      //   res.setHeader("Content-Disposition", `inline; filename="${invoicename}"`);
+      //   res.setHeader("Content-Type", "application/pdf");
+      //   file.pipe(res)     //for serving static files from as folder
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
+
+exports.getcheckout = (req, res, next) => {
+  let total;
+  let products;
+  req.user
+    .populate("cart.items.productId")
+    .then((user) => {
+      products = user.cart.items.filter((p) => p.productId !== null);
+      total = 0;
+      products.forEach((p) => {
+        total += p.quantity * p.productId.price;
+      });
+      return stripe.checkout.sessions
+        .create({
+          payment_method_types: ["card"],
+          mode:'payment',
+          line_items: products.map((p) => {
+            return {
+              price_data: {
+                currency: "ngn",
+                product_data: {
+                  name: p.productId.title,
+                  description: p.productId.description,
+                },
+                unit_amount: p.productId.price * 100, // Stripe expects the amount in kobo (₦)
+              },
+              quantity: p.quantity,
+            };
+          }),
+
+          success_url:
+            req.protocol + "://" + req.get("host") + "/checkout/success",
+          cancel_url:
+            req.protocol + "://" + req.get("host") + "/checkout/cancel",
+        })
+        .then((session) => {
+          res.render("shop/checkout", {
+            path: "/checkout",
+            pageTitle: "Checkout",
+            products: products,
+            isAuthenticated: req.session.isLoggedIn,
+            totalPrice: total,
+            sessionId: session.id,
+          });
+        });
     })
     .catch((err) => {
       const error = new Error(err);
